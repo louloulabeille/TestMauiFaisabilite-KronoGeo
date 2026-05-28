@@ -42,6 +42,7 @@ namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
                     //options.SignIn.RequireConfirmedEmail = true;
                     //options.SignIn.RequireConfirmedAccount = true;
                 })
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<TestDbContext>();
 
                 return services;
@@ -82,6 +83,22 @@ namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
                     };
                 });
 
+                return services;
+            }
+
+            /// <summary>
+            /// ajout des roles et claims 
+            /// pour la gestion de l'autorisation au niveau des controllers ou des actions
+            /// </summary>
+            /// <returns></returns>
+            public IServiceCollection AddAuthorizationPolicy()
+            {
+                services.AddAuthorization(options =>
+                {
+                    options.AddPolicy("ZoneAdmin", policy => policy.RequireClaim("Admin","Manager"));
+                    // - peut être utiliser d'autres claim pour les users si demain je programme un superuser
+                    options.AddPolicy("ZoneUser", policy => policy.RequireClaim("User")); 
+                });
                 return services;
             }
 

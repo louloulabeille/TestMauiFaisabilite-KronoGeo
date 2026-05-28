@@ -15,9 +15,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 #endregion
 
-#region Authentification & JTW-Bearer
+#region Authentification & JTW-Bearer & Policy Role Claims
 builder.Services.AddCustonIdentityUser();
 builder.Services.AddCustomlsAuthentification(builder.Configuration);
+builder.Services.AddAuthorizationPolicy();
 #endregion
 
 var app = builder.Build();
@@ -30,6 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
