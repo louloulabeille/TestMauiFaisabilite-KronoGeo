@@ -27,6 +27,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseDeveloperExceptionPage();
+
+    #region swagger & documentation de l'API que en mode développement
+    // lancement du swagger
+    app.UseSwagger();
+    app.UseSwaggerUI(); // lien https://localhost:7220/swagger/index.html
+    #endregion
 }
 
 app.UseHttpsRedirection();
