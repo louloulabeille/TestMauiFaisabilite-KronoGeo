@@ -7,7 +7,8 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
     public class AuthController : Controller
     {
         [HttpPost]
-        public IActionResult Index()
+        [Route("login")]
+        public async  Task<IActionResult> Login()
         {
             return View();
         }

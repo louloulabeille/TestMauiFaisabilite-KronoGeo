@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Infrastructure.DataBase;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using TestApiFaisabilite_KronoGeo.Infrastructure.ModelsDTO;
 
 namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
 {
@@ -33,7 +38,7 @@ namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
                     options.Lockout.MaxFailedAccessAttempts = 3;
 
-                    // - a mettre en place après
+                    // - a mettre en place après l'un ou l'autre pour valider l'email ou le compte de l'utilisateur
                     //options.SignIn.RequireConfirmedEmail = true;
                     //options.SignIn.RequireConfirmedAccount = true;
                 })
@@ -41,6 +46,45 @@ namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
 
                 return services;
             }
+
+            /// <summary>
+            /// installer le framework Authentification Jbearer mais avant au niveau de la base il faut installer
+            /// entity identity framwork et créer les tables en migrant
+            /// </summary>
+            /// <param name="config"></param>
+            /// <returns></returns>
+            public IServiceCollection AddCustomlsAuthentification(IConfiguration config)
+            {
+                // récupération de la key de chiffrement qui est dans le le settings
+                //string key = config["Key:Symetrique"]?? string.Empty;
+                KeyBearer? cle = new();
+                config.GetSection("Bearer").Bind(cle);
+
+                // - ajout dans le services Ioptions de Keybearer en injection de dépendance
+                // pour pouvoir l'utiliser dans les controllers ou autres services
+                services.AddOptions<KeyBearer>().Bind(config.GetSection("Bearer"));
+
+                // - configuration de l'authentification Jbearer
+                services.AddAuthentication(options => {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                }).AddJwtBearer(options => {
+                    // - configuration de la validation du token
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(cle.Key??throw new ArgumentNullException("Bearer key is not configured"))),
+                        ValidateAudience = cle.ValidateAudience,
+                        ValidateIssuer = cle.ValidateIssuer,
+                        ValidateActor = cle.ValidateActor, // - valider l'acteur qui est à l'origine de la demande d'authentification OAuth2.0
+                        ValidateLifetime = cle.ValidateLifetime,    // durée de vie à paramétrer lors de la création du token envoyer vers l'user
+                    };
+                });
+
+                return services;
+            }
+
         }
     }
 }
