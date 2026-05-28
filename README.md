@@ -1,4 +1,6 @@
 # TestMauiFaisabilite-KronoGeo
+
+############################ Programmation MAUI pour Android ##############################################
 Pour la géolocation,  utilisation des APi d'android directement, ne pas prendre le toolkit de la communauté - le point GPS n'est pas précis - marche bien pour les véhicules - occureny de 100m pour le best et entre 0 et 10 m pour IOs.
 Programmer directement avec les API d'Android voir dans le répertoire Platforms/Android :
 - AndroidLocationService.cs
@@ -12,3 +14,4 @@ Utilisation de la prise des photos :
 Programmation, installation de toolkit.CameraView et voir le répertoire Platforms/Android:
 - TakePhoto.cs
 - Au niveau de la prise de vue pour les autres options par exemple zoom ou autre prendre CommunityToolkit.Maui.Camera pour le faire.
+##########################################################################################################
