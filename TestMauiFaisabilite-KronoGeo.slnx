@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="TestMauiFaisabilite-KronoGeo/TestMauiFaisabilite-KronoGeo.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+</Solution>

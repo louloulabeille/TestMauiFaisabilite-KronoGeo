@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TestMauiFaisabilite_KronoGeo.MainPage"
+             Title="Test Page"
+             Shell.BackgroundColor="#0E1D31"
+             Shell.TitleColor="White"
+             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}">
+    <!-- ToolBar -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="ToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MaterialIcons-Regular" Glyph="&#xe5d2;"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Clicked="ToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MaterialIcons-Regular" Glyph="&#xe88a;"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+<!-- Main Page -->
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            <Label x:Name="locationLabel" Text="" />
+            <Button Text="Get Location" Clicked="OnGetLocationClicked" />
+            
+            <Label x:Name="actualLabel" Text="" />
+            <Button Text="Get Actual Location" Clicked="OnGetActualLocationClicked" />
+            
+            <Button Text="Get All Locations" Clicked="OnGetAllLocationsClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

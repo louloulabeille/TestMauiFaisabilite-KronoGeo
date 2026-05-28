@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:mapsui="clr-namespace:Mapsui.UI.Maui;assembly=Mapsui.UI.Maui"
+             xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+             x:Class="TestMauiFaisabilite_KronoGeo.GeolocalisationPage"
+             Title="Geolocalisation">
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="8*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0"
+                Text="Suivi Géolocalisation"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+
+        <Button Grid.Row="1" Text="Get Location" Clicked="OnGetLocationClicked" />
+        <Button Grid.Row="2"  Text="Stop Location" Clicked="OnStopLocationClicked" />
+        <ScrollView Grid.Row="3">
+            <VerticalStackLayout  Padding="10">
+                <Label x:Name="LocationLabel"  Text=""/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <maps:Map 
+            x:Name="googleMap" Loaded="OnMapLoad" IsShowingUser="True"
+            Grid.Row="4" IsScrollEnabled="True" IsZoomEnabled="True"/>
+        <!-- <mapsui:MapView x:Name="mapView" Grid.Row="4"/> -->
+    </Grid>
+</ContentPage>
