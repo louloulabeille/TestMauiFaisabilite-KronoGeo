@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infracstructure.DataBase
+namespace Infrastructure.DataBase
 {
     public class TestContextFactory : IDesignTimeDbContextFactory<TestDbContext>
     {

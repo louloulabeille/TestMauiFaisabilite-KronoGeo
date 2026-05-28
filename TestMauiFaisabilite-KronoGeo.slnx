@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="Infracstructure/Infracstructure.csproj" Id="aefc0d88-e4f8-4734-8ed5-47858e6504dd" />
+  <Project Path="Infracstructure/Infrastructure.csproj" Id="aefc0d88-e4f8-4734-8ed5-47858e6504dd" />
   <Project Path="TestApiFaisabilite-KronoGeo/TestApiFaisabilite-KronoGeo.csproj" Id="f0420762-e9f0-43bc-b1d7-2b9f49e99d87" />
   <Project Path="TestMauiFaisabilite-KronoGeo/TestMauiFaisabilite-KronoGeo.csproj">
     <Deploy Solution="Debug|*" />
