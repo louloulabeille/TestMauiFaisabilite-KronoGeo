@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using TestApiFaisabilite_KronoGeo.Infrastructure.ModelsDTO;
 using TestApiFaisabilite_KronoGeo.Infrastructure.Security;
@@ -10,10 +11,12 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthController(SignInManager<IdentityUser> signInManager,
-            IOptions<KeyBearer> keyBearer) : Controller
+        RoleManager<IdentityRole> roleManager,
+        IOptions<KeyBearer> keyBearer) : Controller
     {
         #region private properties
         private readonly SignInManager<IdentityUser> _signInManager = signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly KeyBearer _keyBearer = keyBearer.Value;
         #endregion
 
@@ -123,6 +126,21 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
                 Console.WriteLine("Error during logout: " + ex.Message);
                 return this.Problem("Internal error occurred.");
             }
+        }
+        #endregion
+
+        #region Test Create Role
+        [HttpGet]
+        [Route("Roles")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetRoles()
+        {
+            /*foreach(var role in _roleManager.Roles)
+            {
+                await _roleManager.DeleteAsync(role);
+            }*/
+
+            return this.Ok(_roleManager.Roles);
         }
         #endregion
 

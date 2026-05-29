@@ -16,6 +16,10 @@ builder.Services.AddControllers( options =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+#region DbContext
+builder.Services.AddCustomDbContext(builder.Configuration);
+#endregion
+
 #region Swagger
 //ajout de swagger pour la documentation de l'API & il faut installer le package
 //Swashbuckle.AspNetCore pour que ça fonctionne
@@ -50,19 +54,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    string[] roles = { "Admin", "Manager", "User" };
-
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-        {
-            await roleManager.CreateAsync(new IdentityRole(role));
-        }
-    }
-}
-
+#region ajout des roles par défaut à la base de données au démarrage de l'application
+    await app.InitializeRolesAsync();
+#endregion
 
 app.Run();

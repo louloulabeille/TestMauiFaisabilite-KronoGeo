@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.Text;
 using TestApiFaisabilite_KronoGeo.Infrastructure.ModelsDTO;
 
@@ -103,5 +104,27 @@ namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
             }
 
         }
+
+        extension(WebApplication app)
+        {
+            public async Task<WebApplication> InitializeRolesAsync()
+            {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                    string[] roles = { "Admin", "Manager", "User" };
+
+                    foreach (var role in roles)
+                    {
+                        if (!await roleManager.RoleExistsAsync(role))
+                        {
+                            await roleManager.CreateAsync(new IdentityRole(role));
+                        }
+                    }
+                }
+                return app;
+            }
+        }
+       
     }
 }
