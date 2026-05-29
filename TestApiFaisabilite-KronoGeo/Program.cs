@@ -1,11 +1,17 @@
 
+using Microsoft.AspNetCore.Mvc.Authorization;
 using TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers( options =>
+{
+    // - on peut ajouter le AuthorizeFilter au niveau global pour que toutes les routes soient protégées par défaut
+    // et il faudra ajouter l'attribut [AllowAnonymous] pour les routes qui ne nécessitent pas d'authentification
+    options.Filters.Add(new AuthorizeFilter());
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

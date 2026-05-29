@@ -65,6 +65,9 @@ namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
                 // pour pouvoir l'utiliser dans les controllers ou autres services
                 services.AddOptions<KeyBearer>().Bind(config.GetSection("Bearer"));
 
+                if (string.IsNullOrEmpty(cle.Key))
+                    throw new InvalidOperationException("Bearer key is not configured.");
+
                 // - configuration de l'authentification Jbearer
                 services.AddAuthentication(options => {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -75,7 +78,7 @@ namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(cle.Key??throw new ArgumentNullException("Bearer key is not configured"))),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(cle.Key)),
                         ValidateAudience = cle.ValidateAudience,
                         ValidateIssuer = cle.ValidateIssuer,
                         ValidateActor = cle.ValidateActor, // - valider l'acteur qui est à l'origine de la demande d'authentification OAuth2.0
@@ -93,12 +96,9 @@ namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
             /// <returns></returns>
             public IServiceCollection AddAuthorizationPolicy()
             {
-                services.AddAuthorization(options =>
-                {
-                    options.AddPolicy("ZoneAdmin", policy => policy.RequireClaim("Admin","Manager"));
-                    // - peut être utiliser d'autres claim pour les users si demain je programme un superuser
-                    options.AddPolicy("ZoneUser", policy => policy.RequireClaim("User")); 
-                });
+                services.AddAuthorizationBuilder()
+                    .AddPolicy("ZoneAdmin", policy => policy.RequireClaim("Admin","Manager"))
+                    .AddPolicy("ZoneUser", policy => policy.RequireClaim("User"));
                 return services;
             }
 
