@@ -10,14 +10,12 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthController(SignInManager<IdentityUser> signInManager,
-        IOptions<KeyBearer> keyBearer) : Controller
+            IOptions<KeyBearer> keyBearer) : Controller
     {
         #region private properties
-        private readonly SignInManager<IdentityUser> _signInManager = signInManager; 
+        private readonly SignInManager<IdentityUser> _signInManager = signInManager;
         private readonly KeyBearer _keyBearer = keyBearer.Value;
         #endregion
-
-
 
 
         #region Authentification login
@@ -138,6 +136,7 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
         {
             return !_signInManager.UserManager.Users.Any();
         }
+
         #endregion
     }
 }
