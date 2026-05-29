@@ -109,7 +109,9 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
         #endregion
 
         #region Logout
-        [HttpPost]
+        // - ne sert à rien aucun stockage de token ou de session côté serveur,
+        // - mais c'est pour montrer comment on peut faire un logout
+        /*[HttpPost]
         [Route("Logout")]
         public async Task<IActionResult> Logout([FromBody] LoginRequest request)
         {
@@ -121,8 +123,8 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
                 if(user is not null)
                 {
                     await _signInManager.SignOutAsync();
-                    request.Token = await SecurityTokenGenerate.GenerateJwtToken(user, _keyBearer, _signInManager.UserManager);
-                    return this.Ok(request);
+                    //request.Token = await SecurityTokenGenerate.GenerateJwtToken(user, _keyBearer, _signInManager.UserManager);
+                    return this.Ok();
                 }
                 return this.BadRequest("Logout failed.");
             }
@@ -132,7 +134,7 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
                 Console.WriteLine("Error during logout: " + ex.Message);
                 return this.Problem("Internal error occurred.");
             }
-        }
+        }*/
         #endregion
 
         #region Test Create Role
