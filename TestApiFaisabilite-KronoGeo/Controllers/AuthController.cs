@@ -43,7 +43,7 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
                         // - Generate a token or set up the session as needed
                         // - For demonstration, we will just return a success message
                         request.Token = await SecurityTokenGenerate.GenerateJwtToken(user, _keyBearer, _signInManager.UserManager);
-                        return this.Ok(new { Message = "Login successful", LogUser = request });
+                        return this.Ok(request);
                     }
 
                     if (result.IsLockedOut)
@@ -82,12 +82,17 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
                 if (result.Succeeded)
                 {
                     // for the first account is Admin and the others are User
-                    if(IsNoAccount())
-                        _signInManager.UserManager.AddToRoleAsync(user, "Admin").Wait(); // Assign Admin role to the first user
+                    if (IsFirstAccount())
+                    {
+                        // Assign Admin & User role to the first user
+                        await _signInManager.UserManager.AddToRolesAsync(user,["Admin", "User"]);
+                        //await _signInManager.UserManager.AddToRoleAsync(user, ); 
+                    }
                     else
-                        _signInManager.UserManager.AddToRoleAsync(user, "User").Wait(); // Assign default role
+                        await _signInManager.UserManager.AddToRoleAsync(user, "User"); // Assign default role
 
-                    return this.Ok(new { Message = "User created successfully", User = user });
+                    request.Token = await SecurityTokenGenerate.GenerateJwtToken(user, _keyBearer, _signInManager.UserManager);
+                    return this.Ok(request);
                 }
                 else
                 {
@@ -116,7 +121,8 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
                 if(user is not null)
                 {
                     await _signInManager.SignOutAsync();
-                    return this.Ok(new { Message = "Logout successful" });
+                    request.Token = await SecurityTokenGenerate.GenerateJwtToken(user, _keyBearer, _signInManager.UserManager);
+                    return this.Ok(request);
                 }
                 return this.BadRequest("Logout failed.");
             }
@@ -132,7 +138,8 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
         #region Test Create Role
         [HttpGet]
         [Route("Roles")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetRoles()
         {
             /*foreach(var role in _roleManager.Roles)
@@ -146,13 +153,13 @@ namespace TestApiFaisabilite_KronoGeo.Controllers
 
         #region private methods
         /// <summary>
-        /// method retoune si il n'existe aucun compte 
-        /// dans la base de données pour permettre la création du premier compte qui sera Admin
+        /// method retoune si il n'existe le premier compte créé
+        /// dans la base de données pour permettre la création du compte qui sera Admin
         /// </summary>
         /// <returns></returns>
-        private bool IsNoAccount()
+        private bool IsFirstAccount()
         {
-            return !_signInManager.UserManager.Users.Any();
+            return _signInManager.UserManager.Users.Count() == 1;
         }
 
         #endregion

@@ -107,12 +107,17 @@ namespace TestApiFaisabilite_KronoGeo.Infrastructure.ExtendMethods
 
         extension(WebApplication app)
         {
+            /// <summary>
+            /// method qui ajoute les roles par défaut à la base de données au démarrage 
+            /// de l'application
+            /// </summary>
+            /// <returns></returns>
             public async Task<WebApplication> InitializeRolesAsync()
             {
                 using (var scope = app.Services.CreateScope())
                 {
                     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                    string[] roles = { "Admin", "Manager", "User" };
+                    string[] roles = ["Admin", "Manager", "User"];
 
                     foreach (var role in roles)
                     {

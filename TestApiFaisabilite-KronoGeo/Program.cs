@@ -55,7 +55,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 #region ajout des roles par défaut à la base de données au démarrage de l'application
-    await app.InitializeRolesAsync();
+await app.InitializeRolesAsync();
 #endregion
 
 app.Run();
