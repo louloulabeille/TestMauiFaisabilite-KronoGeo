@@ -17,3 +17,14 @@ Programmation, installation de toolkit.CameraView et voir le répertoire Platfor
 - Au niveau de la prise de vue pour les autres options par exemple zoom ou autre prendre CommunityToolkit.Maui.Camera pour le faire.
 - 
 ##########################################################################################################
+
+########################### Api mise en place des roles au niveau d'identity ###########################
+
+-  utiliser Identity
+-  créer la base
+-  mettre en place JWT bearer
+-  le configurer et rajouter les rôles dans le programme de création du token
+-  ajouter l'Authorize ave role au niveau des action ou controler  
+
+########################################################################################################
+
